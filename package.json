@@ -1,8 +1,8 @@
 {
-  "name": "goit-react-woolf-hw-04-phonebook",
+  "name": "goit-react-woolf-hw-06-phonebook",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://yevhenporohniaviy.github.io/goit-react-woolf-hw-04-phonebook/",
+  "homepage": "https://yevhenporohniaviy.github.io/goit-react-woolf-hw-06-phonebook/",
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.3",
     "@testing-library/jest-dom": "^5.16.3",
