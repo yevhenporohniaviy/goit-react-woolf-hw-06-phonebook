@@ -1,25 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { ContactForm, ContactList, Filter, Section } from './Phonebook';
 import { nanoid } from 'nanoid';
 
-const defaultContacts = [
-  { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-  { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-  { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-  { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-];
+import { useDispatch, useSelector } from 'react-redux';
+
+import { addContact, deleteContact } from '../redux/contactsSlice';
+import { setFilter } from '../redux/filterSlice';
+import { getContacts, getFilter } from '../redux/selectors';
 
 function App() {
-  const [contacts, setContacts] = useState(() => {
-    return (
-      JSON.parse(window.localStorage.getItem('contacts')) ?? defaultContacts
-    );
-  });
-  const [filter, setFilter] = useState('');
-
-  useEffect(() => {
-    localStorage.setItem('contacts', JSON.stringify(contacts));
-  }, [contacts]);
+  const dispatch = useDispatch();
+  const filter = useSelector(getFilter);
+  const contacts = useSelector(getContacts);
 
   const handleAddContact = data => {
     const isInContacts = contacts.some(
@@ -31,19 +23,19 @@ function App() {
       return;
     }
 
-    setContacts([...contacts, { ...data, id: nanoid() }]);
+    dispatch(addContact({ ...data, id: nanoid() }));
   };
 
   const handleTypeFilter = value => {
-    setFilter(value);
+    dispatch(setFilter(value.toLowerCase().trim()));
   };
 
   const handleRemoveContact = id => {
-    setContacts(contacts.filter(contact => contact.id !== id));
+    dispatch(deleteContact({ id }));
   };
 
-  const filterList = contacts.filter(contact =>
-    contact.name.toLowerCase().includes(filter.toLowerCase())
+  const filterList = contacts.filter(({ name }) =>
+    name.toLowerCase().includes(filter.toLowerCase())
   );
 
   return (
