@@ -1,6 +1,25 @@
 import { useForm } from 'react-hook-form';
+import { nanoid } from '@reduxjs/toolkit';
+import { useDispatch, useSelector } from 'react-redux';
+import { addContact } from '../../redux/contactsSlice';
+import { getContacts } from '../../redux/selectors';
 
-const ContactForm = ({ onAddContact }) => {
+const ContactForm = () => {
+  const dispatch = useDispatch();
+  const contacts = useSelector(getContacts);
+  const handleAddContact = data => {
+    const isInContacts = contacts.some(
+      ({ name }) => name.toLowerCase() === data.name.toLowerCase()
+    );
+
+    if (isInContacts) {
+      alert(`${data.name} is already in contacts`);
+      return;
+    }
+
+    dispatch(addContact({ ...data, id: nanoid() }));
+  };
+
   const {
     handleSubmit,
     register,
@@ -18,7 +37,7 @@ const ContactForm = ({ onAddContact }) => {
     <>
       <form
         onSubmit={handleSubmit(data => {
-          onAddContact(data);
+          handleAddContact(data);
           reset();
         })}
         noValidate
